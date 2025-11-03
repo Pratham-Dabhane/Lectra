@@ -1,0 +1,95 @@
+{
+  "info": {
+    "name": "Lectra Backend API",
+    "description": "API collection for testing Lectra document ingestion backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/api/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "health"]
+        },
+        "description": "Check if the backend service is healthy and Pinecone is connected"
+      }
+    },
+    {
+      "name": "Root Info",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": [""]
+        },
+        "description": "Get API information and available endpoints"
+      }
+    },
+    {
+      "name": "Ingest Document",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"file_url\": \"https://your-project.supabase.co/storage/v1/object/public/user-docs/your-file.pdf\",\n  \"user_id\": \"your-user-uuid-here\",\n  \"file_name\": \"optional-file-name.pdf\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/ingest",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "ingest"]
+        },
+        "description": "Ingest a document from Supabase Storage. Replace file_url and user_id with actual values."
+      }
+    },
+    {
+      "name": "Delete Document Vectors",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/api/vectors/:user_id/:file_name",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "vectors", ":user_id", ":file_name"],
+          "variable": [
+            {
+              "key": "user_id",
+              "value": "your-user-uuid"
+            },
+            {
+              "key": "file_name",
+              "value": "document.pdf"
+            }
+          ]
+        },
+        "description": "Delete all vectors for a specific document"
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    }
+  ]
+}
