@@ -61,8 +61,8 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
   }
 
   return (
-    <div className="card">
-      <div className="text-center mb-6">
+    <div className="card" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div className="text-center mb-5">
         <div 
           className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 gradient-bg"
           style={{ boxShadow: '0 4px 20px rgba(59, 227, 244, 0.3)' }}
@@ -84,12 +84,17 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
         </p>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-4" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div 
           className="border-2 border-dashed rounded-lg p-8 text-center transition-all duration-300"
           style={{ 
             borderColor: 'rgba(203, 213, 225, 0.5)',
-            borderRadius: 'var(--radius-md)'
+            borderRadius: 'var(--radius-md)',
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '180px'
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.borderColor = 'var(--electric-cyan)';
@@ -107,7 +112,7 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
             className="hidden"
             id="file-upload"
           />
-          <label htmlFor="file-upload" className="cursor-pointer">
+          <label htmlFor="file-upload" className="cursor-pointer" style={{ width: '100%' }}>
             <div className="space-y-3">
               <svg 
                 className="w-12 h-12 mx-auto" 

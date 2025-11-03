@@ -59,23 +59,23 @@ export default function Dashboard() {
       <Navbar />
 
       {/* Hero Section */}
-      <div className="relative overflow-hidden py-12 lg:py-16">
+      <div className="relative overflow-hidden py-8 lg:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center fade-in">
-            <h1 className="gradient-text mb-4" style={{ 
+            <h1 className="gradient-text mb-3" style={{ 
               fontSize: 'clamp(2rem, 4vw, 3rem)',
               lineHeight: '1.2'
             }}>
               Learn Smarter with Lectra
             </h1>
-            <p className="text-lg md:text-xl mb-3 max-w-2xl mx-auto" style={{ 
+            <p className="text-lg md:text-xl mb-2 max-w-2xl mx-auto" style={{ 
               color: 'var(--text-primary)', 
               fontWeight: 500,
               lineHeight: '1.5'
             }}>
               Your notes. Your questions. Your AI tutor.
             </p>
-            <p className="text-base mb-8 max-w-xl mx-auto" style={{ 
+            <p className="text-base mb-6 max-w-xl mx-auto" style={{ 
               color: 'var(--text-secondary)',
               lineHeight: '1.6'
             }}>
@@ -83,7 +83,7 @@ export default function Dashboard() {
             </p>
             
             {/* Feature Pills */}
-            <div className="flex flex-wrap gap-3 justify-center items-center mb-6">
+            <div className="flex flex-wrap gap-3 justify-center items-center mb-4">
               <div className="flex items-center px-4 py-2 rounded-full" style={{ 
                 background: 'linear-gradient(135deg, rgba(30, 78, 140, 0.1), rgba(59, 227, 244, 0.1))',
                 border: '1px solid rgba(59, 227, 244, 0.3)'
@@ -130,17 +130,17 @@ export default function Dashboard() {
       </div>
 
       {/* Main Content */}
-      <div className="w-full px-4 sm:px-6 lg:px-8 pb-16 pt-4">
+      <div className="w-full px-4 sm:px-6 lg:px-8 pb-16 pt-2">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch">
             {/* Upload Section */}
-            <div className="space-y-4 fade-in w-full">
-              <div>
+            <div className="flex flex-col fade-in" style={{ height: '100%' }}>
+              <div className="mb-4 text-center">
                 <h2 style={{ 
                   fontSize: '1.5rem', 
                   fontWeight: 600, 
                   color: 'var(--text-primary)',
-                  marginBottom: '0.375rem',
+                  marginBottom: '0.5rem',
                   lineHeight: '1.3'
                 }}>
                   Upload Documents
@@ -157,13 +157,13 @@ export default function Dashboard() {
             </div>
 
             {/* Files Section */}
-            <div className="space-y-4 fade-in w-full" style={{ animationDelay: '0.1s' }}>
-              <div>
+            <div className="flex flex-col fade-in" style={{ animationDelay: '0.1s', height: '100%' }}>
+              <div className="mb-4 text-center">
                 <h2 style={{ 
                   fontSize: '1.5rem', 
                   fontWeight: 600, 
                   color: 'var(--text-primary)',
-                  marginBottom: '0.375rem',
+                  marginBottom: '0.5rem',
                   lineHeight: '1.3'
                 }}>
                   Your Documents

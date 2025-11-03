@@ -183,14 +183,14 @@ code, pre {
 .card {
   background: white;
   border-radius: var(--radius-md);
-  padding: 1.5rem;
+  padding: 2rem;
   box-shadow: var(--shadow-md);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid rgba(203, 213, 225, 0.3);
+  width: 100%;
 }
 
 .card:hover {
-  transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
 }
 

@@ -56,8 +56,8 @@ export default function FileList() {
   }
 
   return (
-    <div className="card">
-      <div className="flex items-center justify-between mb-6">
+    <div className="card" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div className="flex items-center justify-between mb-5">
         <div>
           <h3 style={{ 
             fontSize: '1.25rem', 
@@ -100,7 +100,7 @@ export default function FileList() {
       </div>
 
       {uploads.length === 0 ? (
-        <div className="text-center py-12">
+        <div className="text-center" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '3rem 0' }}>
           <div 
             className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
             style={{ 
@@ -131,7 +131,7 @@ export default function FileList() {
           </p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-3" style={{ flex: 1, overflowY: 'auto', maxHeight: '500px' }}>
           {uploads.map((upload) => (
             <div 
               key={upload.id} 
