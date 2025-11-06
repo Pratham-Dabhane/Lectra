@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes.ingest import router as ingest_router
+from routes.ask import router as ask_router
 from utils.logger import logger
 import os
 
@@ -8,7 +9,7 @@ import os
 app = FastAPI(
     title="Lectra Backend API",
     description="Backend service for Personalized Learning Bot with RAG",
-    version="1.0.0",
+    version="2.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
 )
@@ -24,6 +25,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(ingest_router)
+app.include_router(ask_router, prefix="/api")
 
 @app.get("/")
 async def root():
