@@ -77,9 +77,9 @@ async def health_check():
         
         return {
             "status": "healthy",
-            "model_loaded": rag.model is not None,
-            "device": rag.device,
-            "model_name": rag.model_name
+            "groq_connected": rag.client is not None,
+            "model_name": rag.model_name,
+            "api_key_configured": bool(rag.groq_api_key)
         }
         
     except Exception as e:
