@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Get User ID - Lectra</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+        .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+        h1 {
+            color: #3be3f4;
+            margin-bottom: 10px;
+        }
+        button {
+            background: linear-gradient(135deg, #3be3f4 0%, #00d4ff 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .result {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .label {
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+        .value {
+            color: #3be3f4;
+            word-break: break-all;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: #e2e8f0;
+            margin-bottom: 10px;
+        }
+        .error {
+            color: #f87171;
+            margin-top: 10px;
+        }
+        .success {
+            color: #34d399;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🔑 Get User Info</h1>
+        <p style="color: #94a3b8;">This tool helps you get your User ID and file URLs for testing.</p>
+        
+        <div style="margin-top: 20px;">
+            <div class="label">Supabase URL:</div>
+            <input type="text" id="supabaseUrl" placeholder="https://xxxx.supabase.co">
+            
+            <div class="label">Supabase Anon Key:</div>
+            <input type="text" id="supabaseKey" placeholder="eyJhbGc...">
+            
+            <button onclick="getUserInfo()">Get User Info</button>
+            <button onclick="copyToClipboard()">Copy User ID</button>
+        </div>
+
+        <div id="result"></div>
+        <div id="message"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        let currentUserId = '';
+
+        async function getUserInfo() {
+            const supabaseUrl = document.getElementById('supabaseUrl').value;
+            const supabaseKey = document.getElementById('supabaseKey').value;
+            const resultDiv = document.getElementById('result');
+            const messageDiv = document.getElementById('message');
+
+            if (!supabaseUrl || !supabaseKey) {
+                messageDiv.innerHTML = '<div class="error">Please enter both Supabase URL and Anon Key</div>';
+                return;
+            }
+
+            try {
+                const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+                
+                const { data: { user }, error } = await supabase.auth.getUser();
+                
+                if (error) throw error;
+                
+                if (!user) {
+                    messageDiv.innerHTML = '<div class="error">No user logged in. Please login first at http://localhost:3000/auth</div>';
+                    return;
+                }
+
+                currentUserId = user.id;
+
+                // Get uploaded files
+                const { data: files, error: filesError } = await supabase.storage
+                    .from('user-docs')
+                    .list(user.id);
+
+                let filesHtml = '';
+                if (files && files.length > 0) {
+                    filesHtml = '<div class="label">Uploaded Files:</div>';
+                    files.forEach(file => {
+                        const publicUrl = `${supabaseUrl}/storage/v1/object/public/user-docs/${user.id}/${file.name}`;
+                        filesHtml += `<div class="value" style="margin: 10px 0; padding: 10px; background: #0f172a; border-radius: 6px;">
+                            <div style="color: #e2e8f0; margin-bottom: 5px;">📄 ${file.name}</div>
+                            <div style="font-size: 12px; color: #64748b; word-break: break-all;">${publicUrl}</div>
+                            <button onclick="copyText('${publicUrl}')" style="margin-top: 5px; padding: 6px 12px; font-size: 12px;">Copy URL</button>
+                        </div>`;
+                    });
+                } else {
+                    filesHtml = '<div class="label">No files uploaded yet</div>';
+                }
+
+                resultDiv.innerHTML = `
+                    <div class="label">User ID:</div>
+                    <div class="value">${user.id}</div>
+                    
+                    <div class="label">Email:</div>
+                    <div class="value">${user.email}</div>
+                    
+                    ${filesHtml}
+                `;
+
+                messageDiv.innerHTML = '<div class="success">✓ User info retrieved successfully!</div>';
+
+            } catch (error) {
+                messageDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+                console.error('Error:', error);
+            }
+        }
+
+        function copyToClipboard() {
+            if (!currentUserId) {
+                alert('Please get user info first!');
+                return;
+            }
+            navigator.clipboard.writeText(currentUserId);
+            document.getElementById('message').innerHTML = '<div class="success">✓ User ID copied to clipboard!</div>';
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text);
+            document.getElementById('message').innerHTML = '<div class="success">✓ URL copied to clipboard!</div>';
+        }
+
+        // Auto-fill from localStorage if available
+        window.addEventListener('load', () => {
+            const supabaseUrl = localStorage.getItem('supabaseUrl');
+            const supabaseKey = localStorage.getItem('supabaseKey');
+            
+            if (supabaseUrl) document.getElementById('supabaseUrl').value = supabaseUrl;
+            if (supabaseKey) document.getElementById('supabaseKey').value = supabaseKey;
+        });
+
+        // Save to localStorage when changed
+        document.getElementById('supabaseUrl').addEventListener('change', (e) => {
+            localStorage.setItem('supabaseUrl', e.target.value);
+        });
+        document.getElementById('supabaseKey').addEventListener('change', (e) => {
+            localStorage.setItem('supabaseKey', e.target.value);
+        });
+    </script>
+</body>
+</html>

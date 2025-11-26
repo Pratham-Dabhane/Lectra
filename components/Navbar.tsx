@@ -33,6 +33,22 @@ export default function Navbar() {
             </h1>
           </div>
           <div className="flex items-center space-x-6">
+            <button
+              onClick={() => router.push('/')}
+              className={`text-sm font-medium transition-colors ${
+                router.pathname === '/' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
+              }`}
+            >
+              Home
+            </button>
+            <button
+              onClick={() => router.push('/chat')}
+              className={`text-sm font-medium transition-colors ${
+                router.pathname === '/chat' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
+              }`}
+            >
+              💬 Chat
+            </button>
             <span 
               className="hidden sm:block" 
               style={{ 
