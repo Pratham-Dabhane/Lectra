@@ -1,288 +1,346 @@
-# Lectra - Your Personal AI Learning Companion 🚀
+# 🧠 Lectra - Personalized Learning Bot with RAG
 
-Transform your learning experience with **Lectra**, the intelligent AI platform that makes studying smarter, faster, and more personalized. Upload your notes, ask questions in real-time, and get instant AI-powered insights with source references.
+**AI-powered study assistant that learns from your documents**
 
-![Lectra](https://img.shields.io/badge/Lectra-AI%20Learning-1E4E8C?style=for-the-badge)
-![Next.js](https://img.shields.io/badge/Next.js-13-black?style=for-the-badge&logo=next.js)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.104-009688?style=for-the-badge&logo=fastapi)
-![Supabase](https://img.shields.io/badge/Supabase-Backend-green?style=for-the-badge&logo=supabase)
+Upload PDFs, ask questions, get instant answers with source citations. Built with RAG (Retrieval-Augmented Generation) for accurate, context-aware responses.
+
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat&logo=next.js)
+![FastAPI](https://img.shields.io/badge/FastAPI-Python-009688?style=flat&logo=fastapi)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat&logo=typescript)
+![Supabase](https://img.shields.io/badge/Supabase-Postgres-green?style=flat&logo=supabase)
+
+---
 
 ## ✨ Features
 
-### Core Functionality
-- **🤖 AI Chat Interface**: Real-time question answering about your uploaded documents
-- **📄 Smart Document Upload**: Upload PDF and TXT files securely
-- **🔍 Source References**: Every AI answer includes clickable source citations
-- **💾 Vector Search**: Powered by Pinecone for accurate document retrieval
-- **⚡ Fast Responses**: Groq API delivers answers in under 2 seconds
+### 🎯 Core Capabilities
+- **💬 Intelligent Chat** - Ask questions about your uploaded documents
+- **📚 Context Memory** - Remembers previous conversations for smarter answers
+- **📄 Multi-format Support** - PDF, TXT, and more
+- **🔍 Source Citations** - Every answer shows where it came from
+- **⚡ Fast Responses** - Powered by Groq API (< 2 seconds)
+- **🔐 Secure** - User authentication and data privacy with Supabase
 
-### User Experience
-- **🔐 Secure Authentication**: User authentication with Supabase Auth
-- **📱 Responsive Design**: Works seamlessly on desktop, tablet, and mobile
-- **🎨 Modern UI**: Beautiful Tailwind CSS design with smooth animations
-- **🌙 Real-time Updates**: Instant feedback and live chat updates
+### 🧠 Advanced AI Features
+- **Vector Search** - Pinecone-powered semantic document retrieval
+- **Chat History** - Auto-saves conversations across sessions
+- **Context-Aware** - Uses last 3 chats for better follow-up answers
+- **Source Ranking** - Shows relevance scores (65-95% match)
+
+---
 
 ## 🏗️ Tech Stack
 
-### Frontend
-- **Framework**: Next.js 13 with React 18
-- **Language**: TypeScript
-- **Styling**: TailwindCSS with custom design system
-- **State Management**: React Hooks
-- **Notifications**: react-hot-toast
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| **Frontend** | Next.js 16 + TypeScript | Modern React framework |
+| **Backend** | FastAPI + Python 3.11 | High-performance API |
+| **LLM** | Llama 3.3 70B (Groq) | Answer generation |
+| **Embeddings** | all-mpnet-base-v2 | Text → 768-dim vectors |
+| **Vector DB** | Pinecone | Semantic search |
+| **Database** | Supabase Postgres | User data & chat history |
+| **Storage** | Supabase Storage | Document files |
+| **Auth** | Supabase Auth | User authentication |
 
-### Backend
-- **API Framework**: FastAPI 0.104.1
-- **Language**: Python 3.11+
-- **LLM**: Groq API (Mixtral-8x7b-32768)
-- **Embeddings**: sentence-transformers (all-mpnet-base-v2)
-- **Vector Database**: Pinecone (768-dimensional index)
+**All services have FREE tiers! 🎉**
 
-### Infrastructure
-- **Authentication**: Supabase Auth
-- **Storage**: Supabase Storage
-- **Document Processing**: PyMuPDF
-- **Orchestration**: LangChain
+---
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- Node.js 18+ and npm/yarn
+### 1️⃣ Prerequisites
+- Node.js 18+ 
 - Python 3.11+
-- Supabase account ([free tier](https://supabase.com))
-- Pinecone account ([free tier](https://pinecone.io))
-- Groq API key ([free at console.groq.com](https://console.groq.com))
+- Accounts: [Supabase](https://supabase.com), [Pinecone](https://pinecone.io), [Groq](https://console.groq.com)
 
-### Installation
-
-#### 1. Clone and Install Frontend
+### 2️⃣ Clone & Install
 ```bash
-# Install dependencies
+git clone https://github.com/Pratham-Dabhane/lectra.git
+cd lectra
+
+# Frontend
 npm install
 
-# Create .env.local file
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-# Start frontend
-npm run dev
-```
-Frontend runs on: http://localhost:3000
-
-#### 2. Setup and Start Backend
-```bash
+# Backend
 cd backend
-
-# Create virtual environment
 python -m venv .venv
-
-# Activate virtual environment
 .venv\Scripts\Activate.ps1  # Windows
-# or
-source .venv/bin/activate    # macOS/Linux
-
-# Install dependencies
 pip install -r requirements.txt
-
-# Create .env file with required variables
-GROQ_API_KEY=your_groq_api_key
-SUPABASE_URL=your_supabase_url
-SUPABASE_KEY=your_supabase_key
-PINECONE_API_KEY=your_pinecone_api_key
-PINECONE_ENVIRONMENT=your-pinecone-env
-PINECONE_INDEX_NAME=lectra-embeddings
-
-# Start backend
-uvicorn main:app --reload
 ```
-Backend runs on: http://localhost:8000
 
-### Usage Flow
+### 3️⃣ Configure Environment
 
-1. **Sign Up/Login** → Go to http://localhost:3000/auth
-2. **Upload Documents** → Home page → Upload PDF/TXT files
-3. **Start Chatting** → Click "Start Chatting with AI" button
-4. **Ask Questions** → Type questions about your documents
-5. **View Sources** → Check AI responses with cited references
+**Frontend (`.env.local`):**
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+```
 
-## 📚 Documentation
+**Backend (`backend/.env`):**
+```env
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_KEY=your_service_role_key
+PINECONE_API_KEY=your_pinecone_key
+PINECONE_INDEX_NAME=lectra-embeddings
+GROQ_API_KEY=your_groq_key
+GROQ_MODEL=llama-3.3-70b-versatile
+```
 
-- **[PHASE_4_CHAT_INTEGRATION.md](PHASE_4_CHAT_INTEGRATION.md)** - Complete Phase 4 guide
-- **[QUICK_START_PHASE4.md](QUICK_START_PHASE4.md)** - 5-minute quick start
-- **[backend/GROQ_MIGRATION.md](backend/GROQ_MIGRATION.md)** - Groq API setup guide
-- **[SETUP.md](SETUP.md)** - Detailed setup instructions
+### 4️⃣ Setup Database
 
-## 🏗️ Project Structure
+1. Open [Supabase Dashboard](https://supabase.com/dashboard)
+2. Go to SQL Editor → New Query
+3. Copy & run: `backend/database/migration_phase5.sql`
+
+### 5️⃣ Run Application
+```bash
+# Terminal 1 - Frontend
+npm run dev
+# → http://localhost:3000
+
+# Terminal 2 - Backend
+cd backend
+..\.venv\Scripts\python.exe -m uvicorn main:app --reload
+# → http://localhost:8000
+```
+
+### 6️⃣ Test It!
+1. Sign up at http://localhost:3000/auth
+2. Upload a PDF document
+3. Click "Chat" in navbar
+4. Ask questions about your document!
+
+📖 **Full setup guide:** [SETUP.md](SETUP.md)
+
+---
+
+## 📁 Project Structure
 
 ```
 lectra/
 ├── pages/
-│   ├── auth.tsx              # Authentication page
-│   ├── index.tsx             # Main dashboard (file upload)
-│   └── chat.tsx              # AI chat interface ⭐ NEW
+│   ├── auth.tsx           # Login/signup
+│   ├── index.tsx          # Upload & file list
+│   └── chat.tsx           # Q&A interface
 ├── components/
-│   ├── Navbar.tsx            # Navigation with chat link
-│   ├── FileUpload.tsx        # Document upload component
-│   └── FileList.tsx          # Uploaded files display
-├── lib/
-│   └── supabaseClient.ts     # Supabase configuration
-├── styles/
-│   └── globals.css           # Global styles and design system
-├── backend/                   # FastAPI backend
-│   ├── main.py               # API entry point
+│   ├── FileUpload.tsx     # Drag & drop upload
+│   ├── FileList.tsx       # Uploaded files display
+│   └── Navbar.tsx         # Navigation
+├── backend/
+│   ├── main.py            # FastAPI app
 │   ├── routes/
-│   │   ├── ingest.py         # Document ingestion
-│   │   └── ask.py            # Chat Q&A endpoint ⭐ NEW
+│   │   ├── ingest.py      # Document processing
+│   │   ├── ask.py         # Q&A endpoint
+│   │   └── history.py     # Chat history
 │   ├── services/
-│   │   ├── rag_pipeline.py   # RAG orchestration ⭐ NEW
-│   │   ├── embeddings.py     # Text embeddings
-│   │   ├── vector_store.py   # Pinecone operations
-│   │   └── supabase_client.py
-│   └── .env                  # Backend environment vars
-└── .env.local                # Frontend environment vars
+│   │   ├── rag_pipeline.py       # RAG orchestration
+│   │   ├── chat_history.py       # Conversation memory
+│   │   ├── embeddings.py         # Text embeddings
+│   │   └── vector_store.py       # Pinecone operations
+│   └── database/
+│       └── migration_phase5.sql  # DB schema
+└── documentation/
+    ├── PHASE_3_SETUP.md
+    ├── PHASE_4_CHAT_INTEGRATION.md
+    ├── PHASE_5_MEMORY.md
+    ├── PHASE_5_IMPLEMENTATION.md
+    └── ARCHITECTURE.md
 ```
 
-## 🎨 Design System
+---
 
-### Color Palette
-- **Lectra Blue**: `#1E4E8C` - Primary brand color
-- **Electric Cyan**: `#3BE3F4` - Secondary accent  
-- **Soft Lavender**: `#B7A4F6` - Creative accent
-- **Message Bubbles**: Blue (user) / Gray (AI)
+## 🎯 How It Works
 
-### Typography
-- **Headings**: Poppins (SemiBold/Bold)
-- **Body**: Inter (Regular/Medium)
-- **Chat**: System font stack for readability
+### Document Upload → Ingestion
+```
+1. User uploads PDF → Supabase Storage
+2. Backend extracts text → Chunks (1000 chars each)
+3. Generate embeddings → 768-dim vectors
+4. Store in Pinecone with metadata (user_id, file_name, chunk_index)
+```
 
-## 🛠️ Development
+### Question Answering (RAG)
+```
+1. User asks question → Generate query embedding
+2. Search Pinecone → Top 3 most relevant chunks
+3. Load last 3 chat messages → Build context
+4. Send to Groq LLM → Generate answer
+5. Save Q&A to Supabase → Return with sources
+```
 
-### Available Scripts
+### Memory & Context
+```
+- Stores every Q&A in Supabase Postgres
+- Retrieves last 3 conversations on new question
+- Merges chat history + document chunks
+- Enables follow-up questions without re-explaining
+```
 
-**Frontend:**
-- `npm run dev` - Development server (port 3000)
-- `npm run build` - Production build
-- `npm run start` - Production server
-- `npm run lint` - ESLint checks
+---
 
-**Backend:**
-- `uvicorn main:app --reload` - Development server (port 8000)
-- `pytest` - Run tests (coming soon)
+## 📚 Phase Documentation
 
-### API Endpoints
+| Phase | Feature | Documentation |
+|-------|---------|--------------|
+| **Phase 1-2** | Auth + Upload + Vector DB | `documentation/PHASE_3_SETUP.md` |
+| **Phase 3** | Groq LLM Integration | `documentation/ARCHITECTURE.md` |
+| **Phase 4** | Chat Interface | `documentation/PHASE_4_CHAT_INTEGRATION.md` |
+| **Phase 5** | Memory & History | `documentation/PHASE_5_MEMORY.md` |
 
-**Backend API (http://localhost:8000):**
-- `GET /` - API info
-- `GET /api/health` - Health check with Pinecone status
-- `POST /api/ingest` - Ingest document into vector DB
-- `POST /api/ask` - Ask questions (returns answer + sources) ⭐
-- `GET /api/ask/health` - RAG pipeline health check ⭐
-- `GET /docs` - Interactive API documentation
+---
 
-## 🧪 Testing
+## 🧪 API Endpoints
 
-### Manual Testing Checklist
-- [ ] Login/Signup works
-- [ ] File upload succeeds
-- [ ] Files appear in list
-- [ ] Chat page loads
-- [ ] Message sending works
-- [ ] AI responds with sources
-- [ ] Loading states show
-- [ ] Error handling works
-- [ ] Logout functions
-- [ ] Mobile responsive
+### Backend (http://localhost:8000)
 
-### API Testing
+| Method | Endpoint | Purpose |
+|--------|----------|---------|
+| GET | `/` | API info |
+| GET | `/docs` | Interactive API docs |
+| POST | `/api/ingest` | Process uploaded document |
+| POST | `/api/ask` | Ask question (returns answer + sources) |
+| GET | `/api/history/{user_id}` | Get chat history |
+| DELETE | `/api/history/{user_id}` | Clear chat history |
+
+**Example Request:**
 ```powershell
-# Health check
-curl http://localhost:8000/api/ask/health
-
-# Ask question
 Invoke-RestMethod -Uri "http://localhost:8000/api/ask" `
   -Method POST `
-  -Headers @{ "Content-Type" = "application/json" } `
-  -Body '{"query": "test", "user_id": "your-user-id"}'
+  -ContentType "application/json" `
+  -Body (@{
+    query = "What is cybercrime?"
+    user_id = "your-user-id"
+    top_k = 3
+  } | ConvertTo-Json)
 ```
+
+---
+
+## 🎨 Features in Action
+
+### Smart Follow-up Questions
+```
+Q1: "What is phishing?"
+A1: "Phishing is a cyber attack..."
+
+Q2: "How do I protect myself from it?"
+A2: [Knows "it" = phishing without asking]
+    "To protect yourself from phishing..."
+```
+
+### Persistent Chat History
+- Logout → Login → Previous conversations restored
+- Click "Clear History" to start fresh
+- Conversations auto-saved after every answer
+
+### Source Transparency
+Every answer shows:
+- 📄 Source file name
+- 📊 Relevance score (e.g., 79% match)
+- 📝 Text excerpt preview
+
+---
+
+## 🔧 Configuration
+
+### Adjust Memory Settings
+Edit `backend/.env`:
+```env
+CHAT_CONTEXT_WINDOW=3    # How many chats to remember (default: 3)
+MAX_CHAT_HISTORY=50      # Max chats to store per user (default: 50)
+```
+
+### Change LLM Model
+```env
+GROQ_MODEL=llama-3.3-70b-versatile  # Current
+# Alternatives:
+# GROQ_MODEL=llama-3.1-70b-versatile
+# GROQ_MODEL=llama-3.1-8b-instant (faster)
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### Backend won't start
+```bash
+# Check Python version
+python --version  # Must be 3.11+
+
+# Reinstall dependencies
+pip install -r requirements.txt --force-reinstall
+
+# Check .env file exists
+ls backend/.env
+```
+
+### Frontend can't connect
+1. Verify backend running on port 8000
+2. Check CORS settings in `backend/main.py`
+3. Verify `.env.local` has correct Supabase URL
+
+### Chat history not loading
+1. Run database migration: `backend/database/migration_phase5.sql`
+2. Check Supabase RLS policies are enabled
+3. Verify user is authenticated
+
+📖 **More help:** [documentation/PHASE_5_MEMORY.md#troubleshooting](documentation/PHASE_5_MEMORY.md#troubleshooting)
+
+---
 
 ## 🚀 Deployment
 
-### Frontend (Vercel/Netlify)
-1. Connect GitHub repository
-2. Set environment variables
-3. Deploy automatically on push
+### Frontend → Vercel
+```bash
+vercel --prod
+# Add environment variables in Vercel dashboard
+```
 
-### Backend (Render/Railway/Fly.io)
-1. Use `backend/` as root directory
-2. Set Python 3.11+ runtime
-3. Configure all .env variables
-4. Deploy with `uvicorn main:app --host 0.0.0.0 --port $PORT`
+### Backend → Render/Railway
+1. Set build command: `pip install -r requirements.txt`
+2. Set start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+3. Add all environment variables
 
-### Requirements
-- Node.js 18+ for frontend
-- Python 3.11+ for backend
-- 512MB RAM minimum (works on free tiers!)
+---
 
-## 🤝 Contributing
+## 🗺️ Roadmap
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+- [x] **Phase 1-2:** User auth + file upload + document ingestion
+- [x] **Phase 3:** RAG pipeline with Groq API
+- [x] **Phase 4:** Real-time chat interface with sources
+- [x] **Phase 5:** Conversation memory & history persistence
+- [ ] **Phase 6:** Advanced features
+  - [ ] Voice input/output
+  - [ ] Export conversations to PDF
+  - [ ] Multi-document cross-referencing
+  - [ ] Study session analytics
+  - [ ] Smart summaries & flashcards
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📸 Screenshots
-
-### Dashboard
-Upload your documents and manage your learning materials.
-
-### Chat Interface
-Ask questions and get AI-powered answers with source references.
-
-## 🌟 Roadmap
-
-- [x] Phase 1: Authentication & File Upload
-- [x] Phase 2: Document Ingestion & RAG Backend
-- [x] Phase 3: Groq API Integration
-- [x] Phase 4: Chat Interface with Real-time Q&A
-- [ ] Phase 5: Chat History Persistence
-- [ ] Phase 6: Advanced Features (voice input, export, etc.)
-
-## 📄 License
-
-This project is licensed under the MIT License.
+---
 
 ## 👤 Author
 
 **Pratham Dabhane**
 - GitHub: [@Pratham-Dabhane](https://github.com/Pratham-Dabhane)
-- Repository: [Lectra](https://github.com/Pratham-Dabhane/Lectra)
+- Repository: [Lectra](https://github.com/Pratham-Dabhane/lectra)
+
+---
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) for details
+
+---
 
 ## 🙏 Acknowledgments
 
-- Groq for blazing-fast LLM inference
-- Pinecone for vector database
-- Supabase for authentication and storage
-- Next.js and FastAPI communities
+- [Groq](https://groq.com) - Blazing-fast LLM inference
+- [Pinecone](https://pinecone.io) - Vector database
+- [Supabase](https://supabase.com) - Backend infrastructure
+- [Next.js](https://nextjs.org) - React framework
 
 ---
 
 **Built with ❤️ for learners everywhere**
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License.
-
----
-
-**Lectra** - Learn Smarter with AI
+⭐ Star this repo if you found it helpful!
