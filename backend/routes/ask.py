@@ -50,8 +50,8 @@ async def ask_question(request: AskRequest):
         # Get RAG pipeline instance
         rag = get_rag_pipeline()
         
-        # Generate answer with context
-        result = rag.ask(
+        # Generate answer with context (await the async method)
+        result = await rag.ask(
             query=request.query,
             user_id=request.user_id,
             top_k=request.top_k,

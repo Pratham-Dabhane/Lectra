@@ -23,11 +23,12 @@ export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(true);
   const [user, setUser] = useState<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  // Check authentication
+  // Check authentication and load history
   useEffect(() => {
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -35,7 +36,54 @@ export default function Chat() {
         router.push('/auth');
       } else {
         setUser(user);
-        // Load welcome message
+        await loadChatHistory(user.id);
+      }
+    };
+    checkUser();
+  }, [router]);
+
+  // Load chat history from backend
+  const loadChatHistory = async (userId: string) => {
+    try {
+      setIsLoadingHistory(true);
+      const response = await fetch(`http://localhost:8000/api/history/${userId}?limit=20`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        const historyMessages: Message[] = [];
+        
+        // Add welcome message
+        historyMessages.push({
+          id: '0',
+          role: 'assistant',
+          content: 'Hello! I\'m your personalized learning assistant. Ask me anything about your uploaded notes and documents.',
+          timestamp: new Date(),
+        });
+
+        // Convert history to messages
+        data.chats.forEach((chat: any) => {
+          // User message
+          historyMessages.push({
+            id: `${chat.id}-q`,
+            role: 'user',
+            content: chat.question,
+            timestamp: new Date(chat.created_at),
+          });
+
+          // Assistant message
+          historyMessages.push({
+            id: `${chat.id}-a`,
+            role: 'assistant',
+            content: chat.answer,
+            timestamp: new Date(chat.created_at),
+            references: chat.sources || [],
+          });
+        });
+
+        setMessages(historyMessages);
+        toast.success(`Loaded ${data.total} previous conversations`);
+      } else {
+        // No history, just show welcome message
         setMessages([{
           id: '0',
           role: 'assistant',
@@ -43,9 +91,48 @@ export default function Chat() {
           timestamp: new Date(),
         }]);
       }
-    };
-    checkUser();
-  }, [router]);
+    } catch (error) {
+      console.error('Error loading history:', error);
+      // Show welcome message on error
+      setMessages([{
+        id: '0',
+        role: 'assistant',
+        content: 'Hello! I\'m your personalized learning assistant. Ask me anything about your uploaded notes and documents.',
+        timestamp: new Date(),
+      }]);
+    } finally {
+      setIsLoadingHistory(false);
+    }
+  };
+
+  // Clear chat history
+  const handleClearHistory = async () => {
+    if (!user) return;
+    
+    const confirmed = confirm('Are you sure you want to clear all chat history? This cannot be undone.');
+    if (!confirmed) return;
+
+    try {
+      const response = await fetch(`http://localhost:8000/api/history/${user.id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setMessages([{
+          id: '0',
+          role: 'assistant',
+          content: 'Chat history cleared. How can I help you today?',
+          timestamp: new Date(),
+        }]);
+        toast.success('Chat history cleared successfully');
+      } else {
+        throw new Error('Failed to clear history');
+      }
+    } catch (error) {
+      console.error('Error clearing history:', error);
+      toast.error('Failed to clear chat history');
+    }
+  };
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -127,6 +214,20 @@ export default function Chat() {
     );
   }
 
+  if (isLoadingHistory) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+        <Navbar />
+        <div className="min-h-[calc(100vh-80px)] flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading chat history...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <Navbar />
@@ -138,12 +239,23 @@ export default function Chat() {
             <h1 className="text-3xl font-bold text-gray-900">Chat Assistant</h1>
             <p className="text-gray-600 mt-1">Ask questions about your uploaded documents</p>
           </div>
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-          >
-            Logout
-          </button>
+          <div className="flex space-x-3">
+            <button
+              onClick={handleClearHistory}
+              className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors flex items-center space-x-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              <span>Clear History</span>
+            </button>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+            >
+              Logout
+            </button>
+          </div>
         </div>
 
         {/* Chat Container */}
