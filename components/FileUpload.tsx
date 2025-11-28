@@ -51,6 +51,31 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
       if (dbError) throw dbError
 
       toast.success('Document uploaded successfully!')
+      
+      // Auto-ingest document into vector database
+      toast.loading('Processing document for AI chat...', { id: 'ingestion' })
+      
+      try {
+        const ingestResponse = await fetch('http://localhost:8000/api/ingest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            file_url: publicUrl,
+            user_id: user.id
+          })
+        })
+
+        if (ingestResponse.ok) {
+          toast.success('Document processed! Ready for chat 🎉', { id: 'ingestion' })
+        } else {
+          const errorData = await ingestResponse.json()
+          throw new Error(errorData.detail || 'Ingestion failed')
+        }
+      } catch (ingestError: any) {
+        toast.error(`Upload successful but processing failed: ${ingestError.message}`, { id: 'ingestion' })
+        console.error('Ingestion error:', ingestError)
+      }
+      
       setFile(null)
       onUploadSuccess()
     } catch (error: any) {
@@ -191,10 +216,10 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
           {uploading ? (
             <div className="flex items-center justify-center">
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-              Uploading...
+              Processing...
             </div>
           ) : (
-            'Upload Document'
+            'Upload & Process Document'
           )}
         </button>
       </div>
