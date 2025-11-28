@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabaseClient';
 import Navbar from '../components/Navbar';
 import { toast } from 'react-hot-toast';
+import jsPDF from 'jspdf';
 
 interface Message {
   id: string;
@@ -134,6 +135,161 @@ export default function Chat() {
     }
   };
 
+  // Export conversations to PDF
+  const handleExportPDF = async () => {
+    if (!user || messages.length <= 1) {
+      toast.error('No conversations to export');
+      return;
+    }
+
+    try {
+      toast.loading('Generating PDF...', { id: 'export' });
+
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 20;
+      let yPosition = margin;
+
+      // Title
+      doc.setFontSize(20);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Lectra - Conversation Export', margin, yPosition);
+      yPosition += 10;
+
+      // Export date
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Exported: ${new Date().toLocaleString()}`, margin, yPosition);
+      yPosition += 15;
+
+      // Conversations (skip welcome message)
+      doc.setFontSize(12);
+      const conversationMessages = messages.filter(m => m.id !== '0');
+      
+      for (let i = 0; i < conversationMessages.length; i++) {
+        const message = conversationMessages[i];
+        
+        // Check if we need a new page
+        if (yPosition > pageHeight - 40) {
+          doc.addPage();
+          yPosition = margin;
+        }
+
+        // Role header
+        doc.setFont('helvetica', 'bold');
+        const roleLabel = message.role === 'user' ? '🧑 Question:' : '🤖 Answer:';
+        doc.text(roleLabel, margin, yPosition);
+        yPosition += 7;
+
+        // Content
+        doc.setFont('helvetica', 'normal');
+        const lines = doc.splitTextToSize(message.content, pageWidth - 2 * margin);
+        
+        for (const line of lines) {
+          if (yPosition > pageHeight - 30) {
+            doc.addPage();
+            yPosition = margin;
+          }
+          doc.text(line, margin, yPosition);
+          yPosition += 5;
+        }
+
+        yPosition += 5;
+
+        // References if available
+        if (message.references && message.references.length > 0) {
+          doc.setFontSize(9);
+          doc.setFont('helvetica', 'italic');
+          doc.text('Sources:', margin, yPosition);
+          yPosition += 5;
+          
+          for (const ref of message.references.slice(0, 3)) {
+            const refText = `• ${ref.file_name} (Score: ${ref.relevance_score.toFixed(2)})`;
+            doc.text(refText, margin + 5, yPosition);
+            yPosition += 4;
+          }
+        }
+
+        yPosition += 8;
+        doc.setFontSize(12);
+      }
+
+      // Save PDF
+      const filename = `lectra_chat_${new Date().toISOString().slice(0, 10)}.pdf`;
+      doc.save(filename);
+
+      toast.success('PDF exported successfully!', { id: 'export' });
+    } catch (error) {
+      console.error('Error exporting PDF:', error);
+      toast.error('Failed to export PDF', { id: 'export' });
+    }
+  };
+
+  // Generate flashcards from conversations
+  const handleGenerateFlashcards = async () => {
+    console.log('🎴 Generate Flashcards clicked!');
+    console.log('User:', user);
+    console.log('Messages count:', messages.length);
+    
+    if (!user || messages.length <= 1) {
+      toast.error('No conversations to generate flashcards from');
+      return;
+    }
+
+    try {
+      // Extract Q&A pairs from messages
+      const conversations = [];
+      for (let i = 0; i < messages.length - 1; i++) {
+        if (messages[i].role === 'user' && messages[i + 1].role === 'assistant') {
+          conversations.push({
+            question: messages[i].content,
+            answer: messages[i + 1].content
+          });
+        }
+      }
+      
+      console.log('Conversations found:', conversations.length);
+      console.log('Conversations data:', conversations);
+
+      if (conversations.length === 0) {
+        toast.error('No Q&A pairs found in conversation');
+        return;
+      }
+
+      toast.loading('Generating flashcards with AI...', { id: 'flashcards' });
+
+      const response = await fetch(`http://localhost:8000/api/phase6/flashcards/${user.id}/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          conversations: conversations.slice(-10), // Last 10 Q&A pairs
+          limit: 10
+        })
+      });
+
+      console.log('Response status:', response.status);
+      const data = await response.json();
+      console.log('Response data:', data);
+
+      if (response.ok) {
+        toast.success(`Generated ${data.total_generated || 0} flashcards! 🎉`, { id: 'flashcards' });
+        
+        // Redirect to flashcards page
+        console.log('Redirecting to /flashcards...');
+        setTimeout(() => {
+          console.log('Executing redirect now');
+          router.push('/flashcards');
+        }, 1500);
+      } else {
+        throw new Error(data.detail || 'Failed to generate flashcards');
+      }
+    } catch (error: any) {
+      console.error('Error generating flashcards:', error);
+      toast.error(error.message || 'Failed to generate flashcards', { id: 'flashcards' });
+    }
+  };
+
   // Auto-scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -241,13 +397,36 @@ export default function Chat() {
           </div>
           <div className="flex space-x-3">
             <button
+              onClick={() => {
+                console.log('Button clicked - handler will run');
+                handleGenerateFlashcards();
+              }}
+              className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center space-x-2"
+              title="Generate flashcards from conversations"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+              <span>Flashcards</span>
+            </button>
+            <button
+              onClick={handleExportPDF}
+              className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center space-x-2"
+              title="Export conversations to PDF"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>Export PDF</span>
+            </button>
+            <button
               onClick={handleClearHistory}
               className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors flex items-center space-x-2"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
-              <span>Clear History</span>
+              <span>Clear</span>
             </button>
             <button
               onClick={handleLogout}

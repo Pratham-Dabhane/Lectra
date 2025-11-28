@@ -12,13 +12,17 @@ class SupabaseClient:
     
     def __init__(self):
         self.url = os.getenv("SUPABASE_URL")
-        self.key = os.getenv("SUPABASE_KEY")
+        # Use service_role_key if available (bypasses RLS), otherwise use anon key
+        self.key = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_KEY")
         
         if not self.url or not self.key:
-            raise ValueError("SUPABASE_URL and SUPABASE_KEY must be set in .env file")
+            raise ValueError("SUPABASE_URL and SUPABASE_KEY (or SUPABASE_SERVICE_ROLE_KEY) must be set in .env file")
         
         self.client: Client = create_client(self.url, self.key)
-        logger.info("Supabase client initialized successfully")
+        
+        # Log which key type is being used
+        key_type = "service_role (bypasses RLS)" if os.getenv("SUPABASE_SERVICE_ROLE_KEY") else "anon"
+        logger.info(f"Supabase client initialized successfully with {key_type} key")
     
     def download_file(self, file_url: str) -> bytes:
         """

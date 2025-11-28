@@ -208,6 +208,15 @@ Provide a clear, accurate answer based on the context above."""
                     logger.warning(f"Chat history service not available: {str(e)}")
                     use_memory = False
             
+            # Lazy load analytics service
+            analytics_service = None
+            try:
+                from .analytics_service import AnalyticsService
+                from .supabase_client import supabase_client
+                analytics_service = AnalyticsService(supabase_client.client)
+            except Exception as e:
+                logger.warning(f"Analytics service not available: {str(e)}")
+            
             # Get recent chat history if enabled
             recent_chats = []
             if use_memory and self.chat_history_service:
@@ -276,6 +285,22 @@ Provide a clear, accurate answer based on the context above."""
                     )
                 except Exception as e:
                     logger.warning(f"Could not save chat: {str(e)}")
+            
+            # Step 5: Track analytics (async, non-blocking)
+            if analytics_service:
+                try:
+                    # Extract document names and topics from context
+                    documents = list(set(chunk["file_name"] for chunk in context_chunks))
+                    topics = [chunk.get("topic", "General") for chunk in context_chunks[:2]]  # Top 2 topics
+                    
+                    await analytics_service.track_question(
+                        user_id=user_id,
+                        question=query,
+                        documents=documents,
+                        topics=topics
+                    )
+                except Exception as e:
+                    logger.warning(f"Could not track analytics: {str(e)}")
             
             logger.info(f"Successfully processed question with {len(references)} references and {len(recent_chats)} history messages")
             

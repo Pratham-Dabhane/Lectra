@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from routes.ingest import router as ingest_router
 from routes.ask import router as ask_router
 from routes.history import router as history_router
+from routes.phase6_routes import router as phase6_router
 from utils.logger import logger
 from services.supabase_client import supabase_client
 import os
@@ -29,6 +30,7 @@ app.add_middleware(
 app.include_router(ingest_router)
 app.include_router(ask_router, prefix="/api")
 app.include_router(history_router)
+app.include_router(phase6_router)
 
 @app.get("/")
 async def root():
@@ -58,6 +60,28 @@ async def startup_event():
         logger.info("✓ Chat history service initialized")
     except Exception as e:
         logger.error(f"Failed to initialize chat history service: {str(e)}")
+    
+    # Initialize Phase 6 services
+    try:
+        from services.analytics_service import AnalyticsService
+        from services.export_service import ExportService
+        from services.flashcard_service import FlashcardService
+        from services.cross_reference_service import CrossReferenceService
+        import routes.phase6_routes as phase6_module
+        from services.vector_store import vector_store
+        
+        # Get Pinecone index from vector store singleton
+        pinecone_index = vector_store.index
+        
+        # Initialize services
+        phase6_module.analytics_service = AnalyticsService(supabase_client.client)
+        phase6_module.export_service = ExportService(supabase_client.client)
+        phase6_module.flashcard_service = FlashcardService(supabase_client.client)
+        phase6_module.cross_reference_service = CrossReferenceService(supabase_client.client, pinecone_index)
+        
+        logger.info("✓ Phase 6 services initialized (Analytics, Export, Flashcards, Cross-Reference)")
+    except Exception as e:
+        logger.error(f"Failed to initialize Phase 6 services: {str(e)}")
 
 @app.on_event("shutdown")
 async def shutdown_event():

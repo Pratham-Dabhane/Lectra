@@ -49,6 +49,22 @@ export default function Navbar() {
             >
               💬 Chat
             </button>
+            <button
+              onClick={() => router.push('/flashcards')}
+              className={`text-sm font-medium transition-colors ${
+                router.pathname === '/flashcards' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
+              }`}
+            >
+              🎴 Flashcards
+            </button>
+            <button
+              onClick={() => router.push('/analytics')}
+              className={`text-sm font-medium transition-colors ${
+                router.pathname === '/analytics' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
+              }`}
+            >
+              📊 Analytics
+            </button>
             <span 
               className="hidden sm:block" 
               style={{ 

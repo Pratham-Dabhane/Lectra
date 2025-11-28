@@ -27,6 +27,12 @@ Upload PDFs, ask questions, get instant answers with source citations. Built wit
 - **Context-Aware** - Uses last 3 chats for better follow-up answers
 - **Source Ranking** - Shows relevance scores (65-95% match)
 
+### 🎓 Phase 6: Advanced Study Features (NEW!)
+- **📄 Export to PDF** - Save conversations as formatted PDFs
+- **🔗 Cross-Referencing** - Link related concepts across documents
+- **📊 Study Analytics** - Track progress, streaks, and topic trends
+- **🎴 Smart Flashcards** - AI-generated cards with spaced repetition
+
 ---
 
 ## 🏗️ Tech Stack
