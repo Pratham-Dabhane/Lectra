@@ -526,8 +526,8 @@ export default function Chat() {
                       borderRadius: 'var(--radius-lg)',
                       padding: '1rem 1.25rem',
                       background: message.role === 'user'
-                        ? 'linear-gradient(135deg, var(--neon-cyan), var(--neon-blue))'
-                        : 'rgba(20, 24, 41, 0.8)',
+                        ? 'linear-gradient(135deg, var(--neon-pink), var(--neon-blue))'
+                        : 'rgba(36, 46, 80, 0.8)',
                       color: message.role === 'user' ? 'var(--bg-primary)' : 'var(--text-primary)',
                       border: message.role === 'user' ? '1px solid var(--neon-cyan)' : '1px solid rgba(0, 255, 255, 0.2)',
                       boxShadow: message.role === 'user' ? 'var(--glow-cyan)' : 'none',
