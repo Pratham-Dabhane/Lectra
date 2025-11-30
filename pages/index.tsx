@@ -39,14 +39,23 @@ export default function Dashboard() {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--background)' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-primary)' }}>
         <div className="text-center fade-in">
-          <div 
-            className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4"
-            style={{ borderColor: 'var(--lectra-blue)' }}
-          ></div>
-          <p style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>
-            Loading Lectra...
+          <div className="relative">
+            <div className="spinner mx-auto mb-6"></div>
+            <div className="absolute inset-0 blur-xl opacity-50">
+              <div className="spinner mx-auto"></div>
+            </div>
+          </div>
+          <p style={{ 
+            color: 'var(--text-secondary)', 
+            fontWeight: 600,
+            fontFamily: 'Rajdhani, sans-serif',
+            fontSize: '1.1rem',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase'
+          }}>
+            Initializing LECTRA System...
           </p>
         </div>
       </div>
@@ -54,137 +63,234 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--background)' }}>
-      <Toaster position="top-center" />
+    <div className="min-h-screen" style={{ background: 'var(--bg-primary)', position: 'relative', width: '100%' }}>
+      <Toaster position="top-center" toastOptions={{
+        style: {
+          background: 'var(--bg-card)',
+          color: 'var(--text-primary)',
+          border: '1px solid var(--neon-cyan)',
+          borderRadius: 'var(--radius-md)',
+          fontFamily: 'Rajdhani, sans-serif',
+          fontWeight: 600
+        }
+      }} />
       <Navbar />
 
+      {/* Animated Background Effects */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+        {/* Floating orbs */}
+        <div className="absolute top-20 left-10 w-96 h-96 rounded-full blur-3xl opacity-20 float" 
+          style={{ 
+            background: 'radial-gradient(circle, var(--neon-cyan) 0%, transparent 70%)',
+            animationDelay: '0s'
+          }}></div>
+        <div className="absolute top-1/2 right-10 w-[500px] h-[500px] rounded-full blur-3xl opacity-15 float" 
+          style={{ 
+            background: 'radial-gradient(circle, var(--neon-blue) 0%, transparent 70%)',
+            animationDelay: '1s'
+          }}></div>
+        <div className="absolute bottom-20 left-1/3 w-96 h-96 rounded-full blur-3xl opacity-20 float" 
+          style={{ 
+            background: 'radial-gradient(circle, var(--neon-purple) 0%, transparent 70%)',
+            animationDelay: '2s'
+          }}></div>
+      </div>
+
       {/* Hero Section */}
-      <div className="relative overflow-hidden py-8 lg:py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center fade-in">
-            <h1 className="gradient-text mb-3" style={{ 
-              fontSize: 'clamp(2rem, 4vw, 3rem)',
-              lineHeight: '1.2'
+      <div className="relative" style={{ 
+        zIndex: 1,
+        paddingTop: '3rem',
+        paddingBottom: '3rem'
+      }}>
+        <div style={{
+          width: '100%',
+          maxWidth: '1280px',
+          margin: '0 auto',
+          padding: '0 2rem'
+        }}>
+          <div style={{
+            textAlign: 'center'
+          }} className="fade-in">
+            {/* Main Title */}
+            <h1 className="gradient-text" style={{ 
+              fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+              lineHeight: '1.1',
+              fontFamily: 'Orbitron, sans-serif',
+              fontWeight: 900,
+              letterSpacing: '0.05em',
+              marginBottom: '1.5rem'
             }}>
-              Learn Smarter with Lectra
+              LECTRA
             </h1>
-            <p className="text-lg md:text-xl mb-2 max-w-2xl mx-auto" style={{ 
+            
+            {/* Subtitle */}
+            <p style={{ 
               color: 'var(--text-primary)', 
-              fontWeight: 500,
-              lineHeight: '1.5'
+              fontWeight: 700,
+              lineHeight: '1.4',
+              fontFamily: 'Rajdhani, sans-serif',
+              letterSpacing: '0.03em',
+              fontSize: 'clamp(1.25rem, 2.5vw, 1.5rem)',
+              marginBottom: '1rem',
+              maxWidth: '900px',
+              margin: '0 auto 1rem auto'
             }}>
-              Your notes. Your questions. Your AI tutor.
+              INTELLIGENT LEARNING ASSISTANT
             </p>
-            <p className="text-base mb-6 max-w-xl mx-auto" style={{ 
+            
+            <p style={{ 
               color: 'var(--text-secondary)',
-              lineHeight: '1.6'
+              lineHeight: '1.6',
+              fontFamily: 'Rajdhani, sans-serif',
+              fontWeight: 500,
+              fontSize: 'clamp(1rem, 2vw, 1.125rem)',
+              marginBottom: '2.5rem',
+              maxWidth: '700px',
+              margin: '0 auto 2.5rem auto'
             }}>
-              Upload documents and get personalized learning insights powered by advanced AI.
+              Upload your knowledge. Query with intelligence. Evolve instantly.
             </p>
             
             {/* Feature Pills */}
-            <div className="flex flex-wrap gap-3 justify-center items-center mb-6">
-              <div className="flex items-center px-4 py-2 rounded-full" style={{ 
-                background: 'linear-gradient(135deg, rgba(30, 78, 140, 0.1), rgba(59, 227, 244, 0.1))',
-                border: '1px solid rgba(59, 227, 244, 0.3)'
-              }}>
-                <svg className="w-5 h-5 mr-2" style={{ color: 'var(--electric-cyan)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+            <div style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '1rem',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginBottom: '2.5rem',
+              width: '100%',
+              maxWidth: '900px',
+              margin: '0 auto 2.5rem auto'
+            }}>
+              <div className="glassmorphism flex items-center px-5 py-3 rounded-xl neon-border slide-in-left" style={{ animationDelay: '0.1s' }}>
+                <svg className="w-5 h-5 mr-3" style={{ color: 'var(--neon-cyan)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
-                <span style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '0.875rem' }}>Secure & Private</span>
+                <span style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: '0.95rem', fontFamily: 'Rajdhani, sans-serif', letterSpacing: '0.05em' }}>QUANTUM ENCRYPTED</span>
               </div>
-              <div className="flex items-center px-4 py-2 rounded-full" style={{ 
-                background: 'linear-gradient(135deg, rgba(30, 78, 140, 0.1), rgba(59, 227, 244, 0.1))',
-                border: '1px solid rgba(59, 227, 244, 0.3)'
-              }}>
-                <svg className="w-5 h-5 mr-2" style={{ color: 'var(--electric-cyan)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+              
+              <div className="glassmorphism flex items-center px-5 py-3 rounded-xl neon-border-blue slide-in-left" style={{ animationDelay: '0.2s' }}>
+                <svg className="w-5 h-5 mr-3" style={{ color: 'var(--neon-blue)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                <span style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '0.875rem' }}>AI-Powered</span>
+                <span style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: '0.95rem', fontFamily: 'Rajdhani, sans-serif', letterSpacing: '0.05em' }}>AI CORE</span>
               </div>
-              <div className="flex items-center px-4 py-2 rounded-full" style={{ 
-                background: 'linear-gradient(135deg, rgba(30, 78, 140, 0.1), rgba(59, 227, 244, 0.1))',
-                border: '1px solid rgba(59, 227, 244, 0.3)'
-              }}>
-                <svg className="w-5 h-5 mr-2" style={{ color: 'var(--electric-cyan)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+              
+              <div className="glassmorphism flex items-center px-5 py-3 rounded-xl neon-border slide-in-left" style={{ animationDelay: '0.3s' }}>
+                <svg className="w-5 h-5 mr-3" style={{ color: 'var(--neon-teal)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
-                <span style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '0.875rem' }}>Personalized</span>
+                <span style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: '0.95rem', fontFamily: 'Rajdhani, sans-serif', letterSpacing: '0.05em' }}>DYNAMIC LEARNING</span>
               </div>
             </div>
             
-            {/* Chat CTA Button */}
-            <button
-              onClick={() => router.push('/chat')}
-              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:shadow-xl transform hover:scale-105 transition-all duration-200"
-            >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
-              Start Chatting with AI
-            </button>
+            {/* CTA Button */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              width: '100%'
+            }}>
+              <button
+                onClick={() => router.push('/chat')}
+                className="btn-primary inline-flex items-center px-10 py-4 text-base"
+                style={{ fontSize: '1.1rem' }}
+              >
+                <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                INITIATE AI INTERFACE
+              </button>
+            </div>
           </div>
-        </div>
-
-        {/* Soft gradient mesh background */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-          <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full opacity-30 blur-3xl" style={{ 
-            background: 'radial-gradient(circle, var(--electric-cyan) 0%, transparent 70%)' 
-          }}></div>
-          <div className="absolute top-1/2 -right-40 w-[500px] h-[500px] rounded-full opacity-20 blur-3xl" style={{ 
-            background: 'radial-gradient(circle, var(--soft-lavender) 0%, transparent 70%)' 
-          }}></div>
-          <div className="absolute -bottom-40 left-1/3 w-96 h-96 rounded-full opacity-25 blur-3xl" style={{ 
-            background: 'radial-gradient(circle, var(--lectra-blue) 0%, transparent 70%)' 
-          }}></div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="w-full px-4 sm:px-6 lg:px-8 pb-16 pt-2">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch">
-            {/* Upload Section */}
-            <div className="flex flex-col fade-in" style={{ height: '100%' }}>
-              <div className="mb-4 text-center">
+      {/* Main Content - HARD-CODED CENTERING */}
+      <div style={{ 
+        position: 'relative', 
+        zIndex: 1,
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        paddingBottom: '5rem',
+        paddingTop: '1rem'
+      }}>
+        {/* Centered container with hard-coded max-width and centering */}
+        <div style={{
+          width: '100%',
+          maxWidth: '1280px',
+          margin: '0 auto',
+          padding: '0 1rem'
+        }}>
+          {/* Two-column grid - hard-coded equal widths */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr',
+            gap: '2rem',
+            width: '100%'
+          }}
+          className="lg:grid-cols-2">
+            
+            {/* Upload Section - Left Column */}
+            <div style={{ 
+              display: 'flex', 
+              flexDirection: 'column',
+              width: '100%'
+            }} className="slide-in-left">
+              <div className="mb-6 text-center lg:text-left">
                 <h2 style={{ 
-                  fontSize: '1.5rem', 
-                  fontWeight: 600, 
+                  fontSize: '1.75rem', 
+                  fontWeight: 800, 
                   color: 'var(--text-primary)',
-                  marginBottom: '0.5rem',
-                  lineHeight: '1.3'
+                  marginBottom: '0.75rem',
+                  lineHeight: '1.2',
+                  fontFamily: 'Orbitron, sans-serif',
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase'
                 }}>
-                  Upload Documents
+                  <span style={{ color: 'var(--neon-cyan)' }}>⬆</span> Upload Modules
                 </h2>
                 <p style={{ 
                   color: 'var(--text-secondary)',
-                  fontSize: '0.9375rem',
-                  lineHeight: '1.5'
+                  fontSize: '1rem',
+                  lineHeight: '1.6',
+                  fontFamily: 'Rajdhani, sans-serif',
+                  fontWeight: 500
                 }}>
-                  Add your notes, textbooks, or study materials to get started
+                  Initialize knowledge base with documents and resources
                 </p>
               </div>
               <FileUpload onUploadSuccess={handleUploadSuccess} />
             </div>
 
-            {/* Files Section */}
-            <div className="flex flex-col fade-in" style={{ animationDelay: '0.1s', height: '100%' }}>
-              <div className="mb-4 text-center">
+            {/* Files Section - Right Column */}
+            <div style={{ 
+              display: 'flex', 
+              flexDirection: 'column',
+              width: '100%'
+            }} className="slide-in-right">
+              <div className="mb-6 text-center lg:text-left">
                 <h2 style={{ 
-                  fontSize: '1.5rem', 
-                  fontWeight: 600, 
+                  fontSize: '1.75rem', 
+                  fontWeight: 800, 
                   color: 'var(--text-primary)',
-                  marginBottom: '0.5rem',
-                  lineHeight: '1.3'
+                  marginBottom: '0.75rem',
+                  lineHeight: '1.2',
+                  fontFamily: 'Orbitron, sans-serif',
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase'
                 }}>
-                  Your Documents
+                  <span style={{ color: 'var(--neon-blue)' }}>📁</span> Data Archive
                 </h2>
                 <p style={{ 
                   color: 'var(--text-secondary)',
-                  fontSize: '0.9375rem',
-                  lineHeight: '1.5'
+                  fontSize: '1rem',
+                  lineHeight: '1.6',
+                  fontFamily: 'Rajdhani, sans-serif',
+                  fontWeight: 500
                 }}>
-                  Manage and access your uploaded learning materials
+                  Access and manage your indexed learning materials
                 </p>
               </div>
               <FileList key={refreshKey} />

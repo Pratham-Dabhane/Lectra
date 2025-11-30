@@ -87,47 +87,62 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
 
   return (
     <div className="card" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <div className="text-center mb-5">
+      <div className="text-center mb-6">
         <div 
-          className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 gradient-bg"
-          style={{ boxShadow: '0 4px 20px rgba(59, 227, 244, 0.3)' }}
+          className="w-20 h-20 rounded-xl flex items-center justify-center mx-auto mb-4 float"
+          style={{ 
+            background: 'linear-gradient(135deg, var(--neon-cyan), var(--neon-blue))',
+            boxShadow: 'var(--glow-cyan)',
+            border: '2px solid var(--neon-cyan)'
+          }}
         >
-          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+          <svg className="w-10 h-10" style={{ color: 'var(--bg-primary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
             <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
           </svg>
         </div>
         <h3 style={{ 
           fontSize: '1.25rem', 
-          fontWeight: 600, 
+          fontWeight: 700, 
           color: 'var(--text-primary)',
-          marginBottom: '0.5rem'
+          marginBottom: '0.5rem',
+          fontFamily: 'Orbitron, sans-serif',
+          textTransform: 'uppercase',
+          letterSpacing: '0.05em'
         }}>
-          Upload Your Documents
+          Upload Documents
         </h3>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-          Support for PDF and TXT files up to 10MB
+        <p style={{ 
+          color: 'var(--text-secondary)', 
+          fontSize: '0.95rem',
+          fontFamily: 'Rajdhani, sans-serif',
+          fontWeight: 500
+        }}>
+          PDF and TXT files up to 10MB
         </p>
       </div>
 
       <div className="space-y-4" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div 
-          className="border-2 border-dashed rounded-lg p-8 text-center transition-all duration-300"
+          className="border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300"
           style={{ 
-            borderColor: 'rgba(203, 213, 225, 0.5)',
-            borderRadius: 'var(--radius-md)',
+            borderColor: 'rgba(0, 255, 255, 0.3)',
+            borderRadius: 'var(--radius-lg)',
             flex: 1,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            minHeight: '180px'
+            minHeight: '200px',
+            background: 'rgba(0, 255, 255, 0.02)'
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'var(--electric-cyan)';
-            e.currentTarget.style.background = 'rgba(59, 227, 244, 0.05)';
+            e.currentTarget.style.borderColor = 'var(--neon-cyan)';
+            e.currentTarget.style.background = 'rgba(0, 255, 255, 0.08)';
+            e.currentTarget.style.boxShadow = 'var(--glow-cyan)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(203, 213, 225, 0.5)';
-            e.currentTarget.style.background = 'transparent';
+            e.currentTarget.style.borderColor = 'rgba(0, 255, 255, 0.3)';
+            e.currentTarget.style.background = 'rgba(0, 255, 255, 0.02)';
+            e.currentTarget.style.boxShadow = 'none';
           }}
         >
           <input
@@ -138,22 +153,22 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
             id="file-upload"
           />
           <label htmlFor="file-upload" className="cursor-pointer" style={{ width: '100%' }}>
-            <div className="space-y-3">
+            <div className="space-y-4">
               <svg 
-                className="w-12 h-12 mx-auto" 
-                style={{ color: 'var(--text-secondary)' }}
+                className="w-16 h-16 mx-auto pulse" 
+                style={{ color: 'var(--neon-cyan)' }}
                 fill="none" 
                 stroke="currentColor" 
                 viewBox="0 0 24 24" 
-                strokeWidth="1.5"
+                strokeWidth="2"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              <div style={{ fontSize: '0.95rem' }}>
-                <span style={{ fontWeight: 600, color: 'var(--lectra-blue)' }}>Click to upload</span>
+              <div style={{ fontSize: '1rem', fontFamily: 'Rajdhani, sans-serif', fontWeight: 600 }}>
+                <span style={{ color: 'var(--neon-cyan)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Click to upload</span>
                 <span style={{ color: 'var(--text-secondary)' }}> or drag and drop</span>
               </div>
-              <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
+              <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', fontFamily: 'Rajdhani, sans-serif' }}>
                 PDF, TXT up to 10MB
               </p>
             </div>
@@ -162,16 +177,16 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
 
         {file && (
           <div 
-            className="flex items-center justify-between p-3 rounded-lg"
+            className="flex items-center justify-between p-4 rounded-xl glassmorphism fade-in"
             style={{ 
-              background: 'linear-gradient(135deg, rgba(30, 78, 140, 0.05), rgba(59, 227, 244, 0.05))',
-              border: '1px solid rgba(59, 227, 244, 0.2)'
+              border: '1px solid rgba(0, 255, 255, 0.3)',
+              boxShadow: '0 0 20px rgba(0, 255, 255, 0.1)'
             }}
           >
             <div className="flex items-center space-x-3">
               <svg 
-                className="w-5 h-5" 
-                style={{ color: 'var(--lectra-blue)' }}
+                className="w-6 h-6" 
+                style={{ color: 'var(--neon-cyan)' }}
                 fill="currentColor" 
                 viewBox="0 0 20 20"
               >
@@ -180,9 +195,10 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
               <span 
                 className="truncate"
                 style={{ 
-                  fontSize: '0.875rem',
-                  fontWeight: 600,
-                  color: 'var(--text-primary)'
+                  fontSize: '0.95rem',
+                  fontWeight: 700,
+                  color: 'var(--text-primary)',
+                  fontFamily: 'Rajdhani, sans-serif'
                 }}
               >
                 {file.name}

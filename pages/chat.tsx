@@ -385,23 +385,56 @@ export default function Chat() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen" style={{ background: 'var(--bg-primary)', position: 'relative' }}>
       <Navbar />
       
-      <div className="max-w-5xl mx-auto px-4 py-8">
+      <div style={{
+        width: '100%',
+        maxWidth: '1280px',
+        margin: '0 auto',
+        padding: '2rem'
+      }}>
         {/* Header */}
-        <div className="mb-6 flex justify-between items-center">
+        <div className="mb-6" style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '1rem'
+        }}>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Chat Assistant</h1>
-            <p className="text-gray-600 mt-1">Ask questions about your uploaded documents</p>
+            <h1 style={{
+              fontSize: '2rem',
+              fontWeight: 800,
+              color: 'var(--text-primary)',
+              fontFamily: 'Orbitron, sans-serif',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              marginBottom: '0.5rem'
+            }}>AI Chat Interface</h1>
+            <p style={{
+              color: 'var(--text-secondary)',
+              fontFamily: 'Rajdhani, sans-serif',
+              fontSize: '1rem',
+              fontWeight: 500
+            }}>Query your knowledge base with intelligent assistance</p>
           </div>
-          <div className="flex space-x-3">
+          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
             <button
               onClick={() => {
                 console.log('Button clicked - handler will run');
                 handleGenerateFlashcards();
               }}
-              className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center space-x-2"
+              className="btn-primary"
+              style={{
+                padding: '0.75rem 1.25rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                fontSize: '0.9rem',
+                background: 'linear-gradient(135deg, var(--neon-purple), rgba(168, 85, 247, 0.8))',
+                border: '1px solid var(--neon-purple)'
+              }}
               title="Generate flashcards from conversations"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -411,7 +444,16 @@ export default function Chat() {
             </button>
             <button
               onClick={handleExportPDF}
-              className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center space-x-2"
+              className="btn-primary"
+              style={{
+                padding: '0.75rem 1.25rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                fontSize: '0.9rem',
+                background: 'linear-gradient(135deg, var(--success), rgba(16, 185, 129, 0.8))',
+                border: '1px solid var(--success)'
+              }}
               title="Export conversations to PDF"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -421,26 +463,57 @@ export default function Chat() {
             </button>
             <button
               onClick={handleClearHistory}
-              className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors flex items-center space-x-2"
+              style={{
+                padding: '0.75rem 1.25rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                fontSize: '0.9rem',
+                background: 'rgba(100, 116, 139, 0.2)',
+                border: '1px solid rgba(100, 116, 139, 0.4)',
+                color: 'var(--text-secondary)',
+                borderRadius: 'var(--radius-md)',
+                fontFamily: 'Orbitron, sans-serif',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                cursor: 'pointer',
+                transition: 'all 0.3s'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(100, 116, 139, 0.3)';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(100, 116, 139, 0.2)';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
               <span>Clear</span>
             </button>
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-            >
-              Logout
-            </button>
           </div>
         </div>
 
         {/* Chat Container */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col" style={{ height: 'calc(100vh - 250px)' }}>
+        <div className="card" style={{ 
+          height: 'calc(100vh - 250px)',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          border: '1px solid rgba(0, 255, 255, 0.2)'
+        }}>
           {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-4">
+          <div style={{
+            flex: 1,
+            overflowY: 'auto',
+            padding: '1.5rem',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem'
+          }}>
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -449,23 +522,38 @@ export default function Chat() {
                 <div className={`max-w-[80%] ${message.role === 'user' ? 'order-2' : 'order-1'}`}>
                   {/* Message Bubble */}
                   <div
-                    className={`rounded-2xl px-4 py-3 ${
-                      message.role === 'user'
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-gray-100 text-gray-900'
-                    }`}
+                    style={{
+                      borderRadius: 'var(--radius-lg)',
+                      padding: '1rem 1.25rem',
+                      background: message.role === 'user'
+                        ? 'linear-gradient(135deg, var(--neon-cyan), var(--neon-blue))'
+                        : 'rgba(20, 24, 41, 0.8)',
+                      color: message.role === 'user' ? 'var(--bg-primary)' : 'var(--text-primary)',
+                      border: message.role === 'user' ? '1px solid var(--neon-cyan)' : '1px solid rgba(0, 255, 255, 0.2)',
+                      boxShadow: message.role === 'user' ? 'var(--glow-cyan)' : 'none',
+                      fontFamily: 'Rajdhani, sans-serif',
+                      fontSize: '1rem',
+                      fontWeight: 500,
+                      lineHeight: 1.6
+                    }}
                   >
-                    <p className="whitespace-pre-wrap break-words">{message.content}</p>
+                    <p style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{message.content}</p>
                   </div>
 
                   {/* References */}
                   {message.references && message.references.length > 0 && (
-                    <div className="mt-2 space-y-2">
-                      <p className="text-xs text-gray-500 font-medium">Sources:</p>
+                    <div style={{ marginTop: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                      <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600, fontFamily: 'Orbitron, sans-serif', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Sources:</p>
                       {message.references.map((ref, idx) => (
                         <div
                           key={idx}
-                          className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm"
+                          className="glassmorphism"
+                          style={{
+                            border: '1px solid rgba(0, 255, 255, 0.3)',
+                            borderRadius: 'var(--radius-md)',
+                            padding: '0.75rem',
+                            fontSize: '0.875rem'
+                          }}
                         >
                           <div className="flex items-center justify-between mb-1">
                             <span className="font-medium text-blue-900">
@@ -508,20 +596,48 @@ export default function Chat() {
           </div>
 
           {/* Input Area */}
-          <form onSubmit={handleSendMessage} className="border-t border-gray-200 p-4 bg-gray-50">
-            <div className="flex space-x-3">
+          <form onSubmit={handleSendMessage} style={{
+            borderTop: '1px solid rgba(0, 255, 255, 0.2)',
+            padding: '1rem',
+            background: 'rgba(10, 14, 26, 0.6)'
+          }}>
+            <div style={{ display: 'flex', gap: '0.75rem' }}>
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask a question about your notes..."
-                className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Query your knowledge base..."
+                style={{
+                  flex: 1,
+                  padding: '0.875rem 1.25rem',
+                  border: '1px solid rgba(0, 255, 255, 0.3)',
+                  borderRadius: 'var(--radius-lg)',
+                  background: 'rgba(20, 24, 41, 0.8)',
+                  color: 'var(--text-primary)',
+                  fontFamily: 'Rajdhani, sans-serif',
+                  fontSize: '1rem',
+                  outline: 'none',
+                  transition: 'all 0.3s'
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--neon-cyan)';
+                  e.currentTarget.style.boxShadow = 'var(--glow-cyan)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(0, 255, 255, 0.3)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
                 disabled={isLoading}
               />
               <button
                 type="submit"
                 disabled={isLoading || !input.trim()}
-                className="px-6 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
+                className="btn-primary"
+                style={{
+                  padding: '0.875rem 2rem',
+                  opacity: (isLoading || !input.trim()) ? 0.5 : 1,
+                  cursor: (isLoading || !input.trim()) ? 'not-allowed' : 'pointer'
+                }}
               >
                 {isLoading ? (
                   <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
